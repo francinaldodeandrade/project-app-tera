@@ -1,18 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import logo from "../../images/logo.svg";
 
 export default function Home() {
-  return (
+  const navigate = useNavigate();
+
+  const [users, setUsers] = useState([]);
+  const [currentUser, setCurrentUser] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("https://63cf09718a780ae6e6710dbe.mockapi.io/users") //aqui eu coloco minha API
+      .then((response) => response.json())
+      .then((data) => {
+        setUsers(data);
+        setIsLoading(false); //torna o carregamento falso
+      });
+  }, []);
+
+  return isLoading ? (
+    <h1>isLoading...</h1>
+  ) : (
     <div className="home center">
       <div className="home__logo">
         <img src={logo} className="responsive" alt="" />
       </div>
-      <select className="home__select-users">
-        <option>User 1</option>
-        <option>User 2</option>
-        <option>User 3</option>
+      <select
+        onChange={(event) => setCurrentUser(event.target.value)} //grava o valor do dropdow clicado, para fazer roteamento
+        className="home__select-users"
+      >
+        <option value="">selecione um usuário</option>
+        {users
+          .sort((a, b) => a.fn.localeCompare(b.fn)) //coloca em ordem alfabética
+          .map((user) => (
+            <option value={user.id}>
+              {user.fn} {user.ln}
+            </option>
+          ))}
       </select>
-      <button className="button-primary">Entrar</button>
+      {!!currentUser && (
+        <button
+          onClick={() => navigate(`/Users/${currentUser}`)} //direciona para a rota solicitada
+          className="button-primary"
+        >
+          Entrar
+        </button>
+      )}
     </div>
   );
 }
