@@ -1,0 +1,17 @@
+import React, { useState } from "react";
+import AppFooter from "../organisms/AppFooter";
+import AppHeader from "../organisms/AppHeader";
+import DrawerMenu from "../moleculas/DrawerMenu";
+
+export default function Default(props) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="wrapper">
+      <DrawerMenu open={open} />
+      <AppHeader setOpen={setOpen} />
+      {props.children}
+      <AppFooter />
+    </div>
+  );
+}
