@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../../images/logo.svg";
+import Loading from "../atomic/Loading";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -14,12 +15,12 @@ export default function Home() {
       .then((response) => response.json())
       .then((data) => {
         setUsers(data);
-        setIsLoading(false); //torna o carregamento falso
+        setIsLoading(false); //enquanto a API não responder setIsloading é verdadeiro e o carregamento falso
       });
   }, []);
 
   return isLoading ? (
-    <h1>isLoading...</h1>
+    <Loading />
   ) : (
     <div className="home center">
       <div className="home__logo">
